@@ -44,9 +44,9 @@ GeoBlacklight.Viewer.IndexMap = GeoBlacklight.Viewer.Map.extend({
               layer.on('click', function(e) {
                 // Change currently selected layer color
                 layer.setStyle(options.LAYERS.INDEX.SELECTED);
-                // Change previously selected layer color to original color
+                // Change previously selected layer color to visited color
                 if (prevLayer !== null) {
-                  geoJSONLayer.resetStyle(prevLayer);
+                  prevLayer.setStyle(options.LAYERS.INDEX.VISITED);
                 }
                 prevLayer = layer;
                 GeoBlacklight.Util.indexMapTemplate(feature.properties, function(html) {

@@ -172,6 +172,9 @@ LEAFLET:
       SELECTED:
         <<: *default
         color: "#006bde"
+      VISITED:
+        <<: *default
+        color: "#FFA500"
   VIEWERS:
     WMS:
       <<: *opacity_control
