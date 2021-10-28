@@ -5,6 +5,7 @@ feature 'Index map' do
   # Colors
   default_color = '#1eb300'
   selected_color = '#006bde'
+  visited_color = '#FFA500'
   scenario 'displays index map viewer (polygon)', js: true do
     visit solr_document_path('stanford-fb897vt9938')
     # Wait until SVG elements are added
@@ -14,7 +15,7 @@ feature 'Index map' do
       find('svg g path:nth-child(2)').click
       expect(page).to have_css "svg g path:nth-child(2)[fill='#{selected_color}']"
       first('svg g path').click
-      expect(page).to have_css "svg g path:nth-child(2)[fill='#{default_color}']"
+      expect(page).to have_css "svg g path:nth-child(2)[fill='#{visited_color}']"
     end
   end
   scenario 'displays index map viewer (points)', js: true do
@@ -26,7 +27,7 @@ feature 'Index map' do
       find('svg g path:nth-child(2)').click
       expect(page).to have_css "svg g path:nth-child(2)[fill='#{selected_color}']"
       first('svg g path').click
-      expect(page).to have_css "svg g path:nth-child(2)[fill='#{default_color}']"
+      expect(page).to have_css "svg g path:nth-child(2)[fill='#{visited_color}']"
     end
   end
 end
