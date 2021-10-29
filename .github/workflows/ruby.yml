@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: [2.6]
+        ruby: [2.7]
     steps:
     - uses: actions/checkout@v2
 
@@ -116,7 +116,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: [2.6]
+        ruby: [2.7]
     steps:
     - uses: actions/checkout@v2
 
