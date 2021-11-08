@@ -30,7 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'mime-types'
   spec.add_dependency 'handlebars_assets'
   spec.add_dependency 'rgeo-geojson'
-  spec.add_dependency 'webpacker', '~> 5.0'
+  spec.add_dependency 'webpacker', '~> 4.0'
 
   spec.add_development_dependency 'solr_wrapper'
   spec.add_development_dependency 'rails-controller-testing'
