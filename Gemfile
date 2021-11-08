@@ -33,9 +33,6 @@ else
   end
 end
 
-# Webpacker lock to 4.3.0
-gem 'webpacker', '~> 4.0'
-
 if File.exists?('spec/test_app_templates/Gemfile.extra')
   eval File.read('spec/test_app_templates/Gemfile.extra'), nil, 'spec/test_app_templates/Gemfile.extra'
 end
