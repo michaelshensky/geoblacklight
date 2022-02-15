@@ -1,6 +1,6 @@
 name: CI
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   rubocop:
@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: [2.7, '3.0']
+        ruby: [2.7, 3.0]
     steps:
     - uses: actions/checkout@v2
 
@@ -37,8 +37,6 @@ jobs:
 
     - name: Install dependencies
       run: bundle _2.1.1_ install
-      env:
-        rails_version: 7.0.1
 
     - name: Load config into solr
       run: |
@@ -49,8 +47,6 @@ jobs:
 
     - name: Run tests
       run: bundle exec rake ci
-      env:
-        rails_version: 7.0.1
         ENGINE_CART_RAILS_OPTIONS: '--skip-git --skip-listen --skip-spring --skip-keeps --skip-action-cable --skip-coffee --skip-test'
         SOLR_URL: http://solr:SolrRocks@localhost:8983/solr/blacklight-core
 
@@ -97,3 +93,40 @@ jobs:
         RAILS_VERSION: 6.1.4.4
         ENGINE_CART_RAILS_OPTIONS: '--skip-git --skip-listen --skip-spring --skip-keeps --skip-action-cable --skip-coffee --skip-test'
         SOLR_URL: http://solr:SolrRocks@localhost:8983/solr/blacklight-core
+
+  test_3_1:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.1
+    - name: Create Solr container
+      run: docker run -d -p 8983:8983 geoblacklight/solr:8.9-v1.0.0 server/scripts/ci-start.sh
+
+    - name: Install bundler
+      run: gem install bundler -v 2.1.1
+
+    - name: Install dependencies
+      run: bundle _2.1.1_ install
+
+    - name: Load config into solr
+      run: |
+          cd solr/conf
+          zip -1 -r solr_config.zip ./*
+          curl -H "Content-type:application/octet-stream" --data-binary @solr_config.zip "http://solr:SolrRocks@127.0.0.1:8983/solr/admin/configs?action=UPLOAD&name=blacklight"
+          curl -H 'Content-type: application/json' http://solr:SolrRocks@127.0.0.1:8983/api/collections/  -d '{create: {name: blacklight-core, config: blacklight, numShards: 1}}'
+
+    - name: Run tests
+      run: bundle exec rake ci
+      env:
+        ENGINE_CART_RAILS_OPTIONS: '--skip-git --skip-listen --skip-spring --skip-keeps --skip-action-cable --skip-coffee --skip-test'
+        SOLR_URL: http://solr:SolrRocks@localhost:8983/solr/blacklight-core
+
+    - name: Upload coverage artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage
+        path: coverage/
